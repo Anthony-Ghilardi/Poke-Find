@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
-app.use('/pokemonName', requests);
+app.use('/pokemon', requests);
 
 app.listen(PORT, () => {
     console.log(`The server is running on port ${PORT}`);
