@@ -8,7 +8,6 @@ export default function RouteTests() {
 
   const [userInput, setUserInput] = useState("");
 
-
   async function fetchName() {
     if (!userInput) return;
     try {
@@ -26,7 +25,7 @@ export default function RouteTests() {
 
   async function fetchType() {
     if (!userInput) return;
-    try{
+    try {
       const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -54,31 +53,36 @@ export default function RouteTests() {
     }
   }
 
-  const handleUserInput =(e) => {
-    e.preventDefault();
-    fetchName();
-    fetchType();
-    fetchSprite();
-  }
-
-
   async function fetchDescription() {
+    if (!userInput) return;
     try {
-      const response = await fetch("/pokemon/description");
+      const response = await fetch(`/pokemon/pokemon-species/${userInput.toLowerCase()}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      setPokemonDescription(data);
-      console.log(data);
+
+      const englishFlavorText = data.flavor_text_entries.find(
+        (entry) => entry.language.name === "en"
+      );
+      const description = englishFlavorText
+        ? englishFlavorText.flavor_text
+        : "No description available";
+
+      setPokemonDescription(description);
+      console.log(description);
     } catch (error) {
-      console.error("Error description sprite", error);
+      console.error("Error fetching pokemon description", error);
     }
   }
 
-  useEffect(() => {
+  const handleUserInput = (e) => {
+    e.preventDefault();
+    fetchName();
+    fetchType();
+    fetchSprite();
     fetchDescription();
-  }, []);
+  };
 
   return (
     <div>
@@ -110,7 +114,7 @@ export default function RouteTests() {
       )}
       <h4>
         Pokemon Description:{" "}
-        {pokemonDescription ? pokemonDescription.description : "Loading..."}
+        {pokemonDescription ? pokemonDescription : "Loading..."}
       </h4>
     </div>
   );
