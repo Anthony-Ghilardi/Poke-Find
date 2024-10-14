@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./home.css"
+import "./home.css";
 
 export default function Home() {
   const [pokemonName, setPokemonName] = useState(null);
@@ -58,7 +58,9 @@ export default function Home() {
   async function fetchDescription() {
     if (!userInput) return;
     try {
-      const response = await fetch(`/pokemon/pokemon-species/${userInput.toLowerCase()}`);
+      const response = await fetch(
+        `/pokemon/pokemon-species/${userInput.toLowerCase()}`
+      );
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
@@ -79,7 +81,7 @@ export default function Home() {
   }
 
   async function fetchMoves() {
-    if ( !userInput) return;
+    if (!userInput) return;
     try {
       const response = await fetch(`/pokemon/${userInput.toLocaleLowerCase()}`);
       if (!response.ok) {
@@ -90,7 +92,7 @@ export default function Home() {
 
       setPokemonMove(moves);
       console.log(moves);
-    } catch (error){
+    } catch (error) {
       console.error("Error fetching pokemon moves", error);
     }
   }
@@ -106,43 +108,54 @@ export default function Home() {
 
   return (
     <div>
-      <form onSubmit={handleUserInput}>
+      <h1 className="page-header">Welcome to PokéFind</h1>
+      <form onSubmit={handleUserInput} className="search-bar-container">
         <label>
           <input
+            className="search-bar-input"
             type="text"
-            placeholder="Search for a Pokemon"
+            placeholder="Search for a Pokémon"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
         </label>
         <input type="submit" placeholder="Search" />
       </form>
-      <h1>Pokemon Name: {pokemonName ? pokemonName.name : "Loading..."}</h1>
-      <h2>
-        Pokemon Type:
-        {pokemonType
-          ? pokemonType.map((i, index) => (
-              <span key={index}> {i.type.name} </span>
+      <div className="pokemon-top-container">
+        <div className="row">
+        <h2 className="column">Pokémon Name: {pokemonName ? pokemonName.name : "Loading..."}</h2>
+        <h3 className="column">
+          Pokémon Type:
+          {pokemonType
+            ? pokemonType.map((i, index) => (
+                <span key={index}> {i.type.name} </span>
+              ))
+            : "Loading..."}
+        </h3>
+        </div>
+        <div className="row">
+        <h4 className="column">
+          Pokémon Sprite:
+          {pokemonSprite ? (
+            <img className="sprite-image" src={pokemonSprite} alt="Pokemon Sprite" />
+          ) : (
+            "Loading..."
+          )}
+        </h4>
+        <h5 className="column">
+          Pokémon Description:{" "}
+          {pokemonDescription ? pokemonDescription : "Loading..."}
+        </h5>
+        </div>
+      </div>
+      <h6>
+        Pokémon Moves:{" "}
+        {pokemonMove
+          ? pokemonMove.map((i, index) => (
+              <span key={index}> {i.move.name} </span>
             ))
           : "Loading..."}
-      </h2>
-      <h3>Pokemon Sprite:</h3>
-      {pokemonSprite ? (
-        <img src={pokemonSprite} alt="Pokemon Sprite" />
-      ) : (
-        "Loading..."
-      )}
-      <h4>
-        Pokemon Description:{" "}
-        {pokemonDescription ? pokemonDescription : "Loading..."}
-      </h4>
-      <h5>
-        Pokemon Moves: {" "}
-        {pokemonMove 
-        ? pokemonMove.map((i, index) => (
-          <span key={index}> {i.move.name} </span>
-        )) : "Loading..."}
-      </h5>
+      </h6>
     </div>
   );
 }
