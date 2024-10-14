@@ -6,6 +6,7 @@ export default function Home() {
   const [pokemonType, setPokemonType] = useState(null);
   const [pokemonSprite, setPokemonSprite] = useState(null);
   const [pokemonDescription, setPokemonDescription] = useState(null);
+  const [pokemonMove, setPokemonMove] = useState(null);
 
   const [userInput, setUserInput] = useState("");
 
@@ -77,12 +78,30 @@ export default function Home() {
     }
   }
 
+  async function fetchMoves() {
+    if ( !userInput) return;
+    try {
+      const response = await fetch(`/pokemon/${userInput.toLocaleLowerCase()}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      const moves = data.moves;
+
+      setPokemonMove(moves);
+      console.log(moves);
+    } catch (error){
+      console.error("Error fetching pokemon moves", error);
+    }
+  }
+
   const handleUserInput = (e) => {
     e.preventDefault();
     fetchName();
     fetchType();
     fetchSprite();
     fetchDescription();
+    fetchMoves();
   };
 
   return (
@@ -117,6 +136,13 @@ export default function Home() {
         Pokemon Description:{" "}
         {pokemonDescription ? pokemonDescription : "Loading..."}
       </h4>
+      <h5>
+        Pokemon Moves: {" "}
+        {pokemonMove 
+        ? pokemonMove.map((i, index) => (
+          <span key={index}> {i.move.name} </span>
+        )) : "Loading..."}
+      </h5>
     </div>
   );
 }
