@@ -37,8 +37,15 @@ export default function Home() {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      setPokemonType(data.types);
-      console.log(data.types);
+      const types = data.types.map((type) => {
+        if (type && type.type && type.type.name) {
+          return type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1).toLowerCase();
+        } else {
+          return '';
+        }
+      });
+      setPokemonType(types);
+      console.log(types);
     } catch (error) {
       console.error("Error fetching pokemon type", error);
     }
@@ -93,9 +100,13 @@ export default function Home() {
       }
       const data = await response.json();
       const moves = data.moves;
-
-      setPokemonMove(moves);
       console.log(moves);
+      const cleanedMoves = moves.map(
+        (move) =>
+          move.move.name.charAt(0).toUpperCase() + move.move.name.slice(1)
+      );
+      setPokemonMove(cleanedMoves);
+      console.log(cleanedMoves);
     } catch (error) {
       console.error("Error fetching pokemon moves", error);
     }
@@ -123,7 +134,7 @@ export default function Home() {
             onChange={(e) => setUserInput(e.target.value)}
           />
         </label>
-        <input type="submit" placeholder="Search" />
+        <input className="search-button" type="image" src={require('../../assets/pokeball.png')} />
       </form>
       <div className="pokemon-top-container">
         <div className="row">
@@ -133,8 +144,8 @@ export default function Home() {
           <h3 className="column">
             Pokémon Type:
             {pokemonType
-              ? pokemonType.map((i, index) => (
-                  <span key={index}> {i.type.name} </span>
+              ? pokemonType.map((type, index) => (
+                  <span key={index}> {type} </span>
                 ))
               : "Loading..."}
           </h3>
@@ -159,17 +170,20 @@ export default function Home() {
         </div>
       </div>
       <div className="pokemon-bottom-container">
-        <h6>
+        <h6 className="moves-header">
           {moveGrammar ? moveGrammar : "Loading..."}
         </h6>
-        <p>
-        Pokémon Moves:{" "}
-          {pokemonMove
-            ? pokemonMove.map((i, index) => (
-                <span key={index}> {i.move.name} </span>
-              ))
-            : "Loading..."}
-        </p>
+        <div className="moves-container">
+          <p className="moves-scroll-container">
+            {pokemonMove
+              ? pokemonMove.map((move, index) => (
+                  <span key={index} className="move-box">
+                    {move}
+                  </span>
+                ))
+              : "Loading..."}
+          </p>
+        </div>
       </div>
     </div>
   );

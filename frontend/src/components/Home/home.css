@@ -1,8 +1,8 @@
 .page-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
 }
 
 .search-bar-container {
@@ -18,16 +18,21 @@
   font-size: 1.5rem;
 }
 
+.search-button {
+  width: 5%;
+  height: auto;
+}
+
 .pokemon-top-container {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background-color: #6BFAF1;
-    max-width: 50%;
-    height: 50%;
-    margin: 0 auto;
-    margin-top: 3rem;
-    padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #6bfaf1;
+  max-width: 50%;
+  height: 50%;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 3rem;
 }
 
 .row {
@@ -48,8 +53,56 @@
   border-radius: 6px;
 }
 
-
 .sprite-image {
-    width: 30%;
-    margin: 0 auto;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.pokemon-bottom-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #6bfaf1;
+  max-width: 50%;
+  height: 50%;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 3rem;
+}
+
+.moves-header {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.moves-container {
+  background-color: #6bfaf1;
+}
+
+.moves-scroll-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: left;
+  overflow-y: auto;
+  background-color: #ffffff;
+  max-height: 20dvh;
+  width: 60%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.move-box {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 5px;
+  background-color: #f0f0f0;
+  width: 100px;
+  height: 50px;
+  text-align: center;
+  font-size: 1.2rem;
 }
