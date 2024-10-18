@@ -3,6 +3,7 @@ import "./home.css";
 
 export default function Home() {
   const [pokemonName, setPokemonName] = useState(null);
+  const [moveGrammar, setMoveGrammar] = useState(null);
   const [pokemonType, setPokemonType] = useState(null);
   const [pokemonSprite, setPokemonSprite] = useState(null);
   const [pokemonDescription, setPokemonDescription] = useState(null);
@@ -18,8 +19,11 @@ export default function Home() {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      setPokemonName({ name: data.name });
-      console.log(data);
+      let capitalName = data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
+      let moveNameGrammar = `${capitalName}'s moves`;
+      setPokemonName(capitalName);
+      setMoveGrammar(moveNameGrammar);
+      console.log(capitalName);
     } catch (error) {
       console.error("Error fetching pokemon name", error);
     }
@@ -123,39 +127,50 @@ export default function Home() {
       </form>
       <div className="pokemon-top-container">
         <div className="row">
-        <h2 className="column">Pokémon Name: {pokemonName ? pokemonName.name : "Loading..."}</h2>
-        <h3 className="column">
-          Pokémon Type:
-          {pokemonType
-            ? pokemonType.map((i, index) => (
-                <span key={index}> {i.type.name} </span>
-              ))
-            : "Loading..."}
-        </h3>
+          <h2 className="column">
+            Pokémon Name: {pokemonName ? pokemonName : "Loading..."}
+          </h2>
+          <h3 className="column">
+            Pokémon Type:
+            {pokemonType
+              ? pokemonType.map((i, index) => (
+                  <span key={index}> {i.type.name} </span>
+                ))
+              : "Loading..."}
+          </h3>
         </div>
         <div className="row">
-        <h4 className="column">
-          Pokémon Sprite:
-          {pokemonSprite ? (
-            <img className="sprite-image" src={pokemonSprite} alt="Pokemon Sprite" />
-          ) : (
-            "Loading..."
-          )}
-        </h4>
-        <h5 className="column">
-          Pokémon Description:{" "}
-          {pokemonDescription ? pokemonDescription : "Loading..."}
-        </h5>
+          <h4 className="column">
+            Pokémon Sprite:
+            {pokemonSprite ? (
+              <img
+                className="sprite-image"
+                src={pokemonSprite}
+                alt="Pokemon Sprite"
+              />
+            ) : (
+              "Loading..."
+            )}
+          </h4>
+          <h5 className="column">
+            Pokémon Description:{" "}
+            {pokemonDescription ? pokemonDescription : "Loading..."}
+          </h5>
         </div>
       </div>
-      <h6>
+      <div className="pokemon-bottom-container">
+        <h6>
+          {moveGrammar ? moveGrammar : "Loading..."}
+        </h6>
+        <p>
         Pokémon Moves:{" "}
-        {pokemonMove
-          ? pokemonMove.map((i, index) => (
-              <span key={index}> {i.move.name} </span>
-            ))
-          : "Loading..."}
-      </h6>
+          {pokemonMove
+            ? pokemonMove.map((i, index) => (
+                <span key={index}> {i.move.name} </span>
+              ))
+            : "Loading..."}
+        </p>
+      </div>
     </div>
   );
 }
