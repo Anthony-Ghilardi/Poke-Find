@@ -126,13 +126,24 @@ export default function Home() {
     const urlTwo = `/pokemon/pokemon-species/${randomId}`;
 
     try {
-      const response = await fetch(urlOne);
-      const data = await response.json();
+      const [responseOne, responseTwo] = await Promise.all([
+        fetch(urlOne),
+        fetch(urlTwo)
+      ])
 
+      if (!responseOne.ok || !responseTwo.ok) {
+        throw new Error(`Error: ${responseOne.status} ${responseOne.statusText} or ${responseTwo.status} ${responseTwo.statusText}`)
+      }
+      const data = await responseOne.json();
+      const dataTwo = await responseTwo.json();
+      console.log("Data Two:", dataTwo);
+
+      // Sets state of random pokemon name
       const randomName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
       setPokemonName(randomName);
       console.log("Random name: ", randomName);
 
+      // Set state of random pokemon type
       const randomType = data.types.map((type) => {
         if (type && type.type && type.type.name) {
           return (
@@ -146,25 +157,20 @@ export default function Home() {
       setPokemonType(randomType);
       console.log("Random Type: ", randomType);
 
+      // Sets state of random pokemon sprite
       const randomSprite = data.sprites.front_default;
       setPokemonSprite(randomSprite);
       console.log("Random Sprite: ", randomSprite);
 
+      // Sets state of random pokemon moves
       const randomMoves = data.moves.map(
         (move) =>
-          move.move.map.charAt(0).toUpperCase() + move.move.name.slice(1)
+          move.move.name.charAt(0).toUpperCase() + move.move.name.slice(1)
       );
       console.log("Random Moves: ", randomMoves);
       setPokemonMove(randomMoves);
 
-      const responseTwo = await fetch(urlTwo);
-      if (!responseTwo.ok) {
-        throw new Error(
-          `Error: ${responseTwo.status} ${responseTwo.statusText}`
-        );
-      }
-      const dataTwo = await responseTwo.json();
-      console.log("Data 2: ", dataTwo);
+      // Sets state of random pokemon description
       const randomEnglishFlavorText = dataTwo.flavor_text_entries.find(
         (entry) => entry.language.name === "en"
       );
@@ -190,7 +196,6 @@ export default function Home() {
   const handleRandomPokemon = (e) => {
     e.preventDefault();
     fetchRandomPokemon();
-    console.log("clicked");
   };
 
   return (
