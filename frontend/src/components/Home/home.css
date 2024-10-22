@@ -1,20 +1,32 @@
+body {
+  background-color: #b80000;
+}
+
+.pokemon-boxes-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+
 .page-header {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 .search-bar-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .search-bar-input {
   border-radius: 6px;
-  padding: 1rem;
+  padding: .5rem;
   font-size: 1.5rem;
 }
 
@@ -28,30 +40,29 @@
   flex-direction: column;
   text-align: center;
   background-color: #6bfaf1;
-  max-width: 50%;
-  height: 50%;
-  margin: 0 auto;
-  margin-top: 3rem;
+  width: 40%;
+  border-radius: 30px;
+  border: 2px solid #000000;
   padding: 3rem;
 }
 
-.row {
+/* .row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   gap: 5rem;
-}
+} */
 
-.column {
+/* .column {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
-  font-size: 1.5rem;
+  font-size: 1rem;
   background-color: #ffffff;
   border-radius: 6px;
-}
+} */
 
 .sprite-image {
   width: 30%;
@@ -63,10 +74,9 @@
   flex-direction: column;
   text-align: center;
   background-color: #6bfaf1;
-  max-width: 50%;
-  height: 50%;
-  margin: 0 auto;
-  margin-top: 3rem;
+  width: 40%;
+  border-radius: 30px;
+  border: 2px solid #000000;
   padding: 3rem;
 }
 
@@ -88,7 +98,8 @@
   text-align: left;
   overflow-y: auto;
   background-color: #ffffff;
-  max-height: 20dvh;
+  border-radius: 30px;
+  max-height: 30dvh;
   width: 60%;
   margin: 0 auto;
   padding: 1rem;
@@ -105,4 +116,29 @@
   height: 50px;
   text-align: center;
   font-size: 1.2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .page-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+  }
+
+  .pokemon-boxes-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pokemon-top-container {
+    margin-bottom: 1rem;
+  }
+
+  .sprite-image {
+    width: 50%;
+    margin: 0 auto;
+    padding: 0px;
+  }
 }
