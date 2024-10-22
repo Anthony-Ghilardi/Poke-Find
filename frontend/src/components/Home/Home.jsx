@@ -98,7 +98,7 @@ export default function Home() {
   async function fetchMoves() {
     if (!userInput) return;
     try {
-      const response = await fetch(`/pokemon/${userInput.toLocaleLowerCase()}`);
+      const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
@@ -116,6 +116,68 @@ export default function Home() {
     }
   }
 
+  async function fetchRandomPokemon() {
+    function getRandomId() {
+      return Math.floor(Math.random() * 1026) + 1;
+    }
+    getRandomId();
+    const randomId = getRandomId();
+    const urlOne = `/pokemon/${randomId}`;
+    const urlTwo = `/pokemon/pokemon-species/${randomId}`;
+
+    try {
+      const response = await fetch(urlOne);
+      const data = await response.json();
+
+      const randomName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+      setPokemonName(randomName);
+      console.log("Random name: ", randomName);
+
+      const randomType = data.types.map((type) => {
+        if (type && type.type && type.type.name) {
+          return (
+            type.type.name.charAt(0).toUpperCase() +
+            type.type.name.slice(1).toLowerCase()
+          );
+        } else {
+          return "";
+        }
+      });
+      setPokemonType(randomType);
+      console.log("Random Type: ", randomType);
+
+      const randomSprite = data.sprites.front_default;
+      setPokemonSprite(randomSprite);
+      console.log("Random Sprite: ", randomSprite);
+
+      const randomMoves = data.moves.map(
+        (move) =>
+          move.move.map.charAt(0).toUpperCase() + move.move.name.slice(1)
+      );
+      console.log("Random Moves: ", randomMoves);
+      setPokemonMove(randomMoves);
+
+      const responseTwo = await fetch(urlTwo);
+      if (!responseTwo.ok) {
+        throw new Error(
+          `Error: ${responseTwo.status} ${responseTwo.statusText}`
+        );
+      }
+      const dataTwo = await responseTwo.json();
+      console.log("Data 2: ", dataTwo);
+      const randomEnglishFlavorText = dataTwo.flavor_text_entries.find(
+        (entry) => entry.language.name === "en"
+      );
+      const randomDescription = randomEnglishFlavorText
+        ? randomEnglishFlavorText.flavor_text
+        : "No description available";
+      console.log("Random description: ", randomDescription);
+      setPokemonDescription(randomDescription);
+    } catch (error) {
+      console.error("Error fetching random pokemon");
+    }
+  }
+
   const handleUserInput = (e) => {
     e.preventDefault();
     fetchName();
@@ -123,6 +185,12 @@ export default function Home() {
     fetchSprite();
     fetchDescription();
     fetchMoves();
+  };
+
+  const handleRandomPokemon = (e) => {
+    e.preventDefault();
+    fetchRandomPokemon();
+    console.log("clicked");
   };
 
   return (
@@ -193,6 +261,11 @@ export default function Home() {
             </p>
           </div>
         </div>
+      </div>
+      <div className="random-pokemon-button-container">
+        <button className="random-pokemon-button" onClick={handleRandomPokemon}>
+          Random Pokémon:
+        </button>
       </div>
     </div>
   );

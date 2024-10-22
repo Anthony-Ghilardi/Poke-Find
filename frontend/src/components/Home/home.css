@@ -118,6 +118,10 @@ body {
   font-size: 1.2rem;
 }
 
+.random-pokemon-button {
+  background-color: blue;
+}
+
 @media screen and (max-width: 768px) {
   .page-header {
     display: flex;
