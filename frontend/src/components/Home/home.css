@@ -1,11 +1,14 @@
 body {
-  background-color: #b80000;
+  background-color: #3e4772;
 }
 
-.pokemon-boxes-container {
+#pokemon-boxes-container {
   display: flex;
   justify-content: space-evenly;
+  display: none;
   margin: 0 auto;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
 .page-header {
@@ -25,6 +28,7 @@ body {
 }
 
 .search-bar-input {
+  background-color: #e5edff;
   border-radius: 6px;
   padding: .5rem;
   font-size: 1.5rem;
@@ -33,13 +37,31 @@ body {
 .search-button {
   width: 5%;
   height: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+.search-button:hover {
+  animation: shaking 0.3s linear 2;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shaking {
+  0%, 50%, 100% {
+    transform: rotate(0deg);
+  }
+  20% { 
+    transform: rotate(-5deg);
+  }
+  70% {
+    transform: rotate(5deg);
+  }
 }
 
 .pokemon-top-container {
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: #6bfaf1;
+  background-color: #b7c6e7;
   width: 40%;
   border-radius: 30px;
   border: 2px solid #000000;
@@ -73,7 +95,7 @@ body {
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: #6bfaf1;
+  background-color: #b7c6e7;
   width: 40%;
   border-radius: 30px;
   border: 2px solid #000000;
@@ -87,7 +109,7 @@ body {
 }
 
 .moves-container {
-  background-color: #6bfaf1;
+  background-color: #b7c6e7;
 }
 
 .moves-scroll-container {
@@ -111,15 +133,33 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin: 5px;
-  background-color: #f0f0f0;
+  background-color: #e5edff;
   width: 100px;
   height: 50px;
   text-align: center;
   font-size: 1.2rem;
 }
 
+.random-pokemon-button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
 .random-pokemon-button {
-  background-color: blue;
+  background-color: #e5edff;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  transition: all 0.3s ease-out;
+}
+
+.random-pokemon-button:hover {
+  background-color: #b7c6e7;
+  transition: all 0.3s ease-out;
 }
 
 @media screen and (max-width: 768px) {

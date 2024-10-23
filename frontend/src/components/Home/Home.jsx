@@ -8,6 +8,7 @@ export default function Home() {
   const [pokemonSprite, setPokemonSprite] = useState(null);
   const [pokemonDescription, setPokemonDescription] = useState(null);
   const [pokemonMove, setPokemonMove] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [userInput, setUserInput] = useState("");
 
@@ -186,16 +187,38 @@ export default function Home() {
 
   const handleUserInput = (e) => {
     e.preventDefault();
-    fetchName();
-    fetchType();
-    fetchSprite();
-    fetchDescription();
-    fetchMoves();
-  };
+    setLoading(true);
+    Promise.all([fetchName(), fetchType(), fetchSprite(), fetchDescription(), fetchMoves()])
+      .then(() => {
+        setLoading(false);
+        const appear = document.getElementById("pokemon-boxes-container");
+        appear.style.display = "flex";
+        setTimeout(() => {
+          appear.style.opacity = 1;
+        }, 10);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error fetching data", error);
+      });
+  }
 
   const handleRandomPokemon = (e) => {
     e.preventDefault();
-    fetchRandomPokemon();
+    setLoading(true);
+    fetchRandomPokemon()
+    .then(() => {
+      setLoading(false);
+      const appear = document.getElementById("pokemon-boxes-container");
+      appear.style.display = "flex";
+      setTimeout(() => {
+        appear.style.opacity = 1;
+      }, 10);
+    })
+    .catch((error) => {
+      setLoading(false);
+      console.error("Error fetching data", error);
+    });
   };
 
   return (
@@ -217,19 +240,18 @@ export default function Home() {
           src={require("../../assets/pokeball.png")}
         />
       </form>
-      <div className="pokemon-boxes-container">
+      <div id="pokemon-boxes-container">
         <div className="pokemon-top-container">
           <div className="row">
             <h2 className="column">
-              Pokémon Name: {pokemonName ? pokemonName : "Loading..."}
+              {pokemonName ? pokemonName : ""}
             </h2>
             <h3 className="column">
-              Pokémon Type:
               {pokemonType
                 ? pokemonType.map((type, index) => (
                     <span key={index}> {type} </span>
                   ))
-                : "Loading..."}
+                : ""}
             </h3>
           </div>
           <div className="row">
@@ -241,18 +263,17 @@ export default function Home() {
                   alt="Pokemon Sprite"
                 />
               ) : (
-                "Loading..."
+                ""
               )}
             </h4>
             <h5 className="column">
-              Pokémon Description:{" "}
-              {pokemonDescription ? pokemonDescription : "Loading..."}
+              {pokemonDescription ? pokemonDescription : ""}
             </h5>
           </div>
         </div>
         <div className="pokemon-bottom-container">
           <h6 className="moves-header">
-            {moveGrammar ? moveGrammar : "Loading..."}
+            {moveGrammar ? moveGrammar : ""}
           </h6>
           <div className="moves-container">
             <p className="moves-scroll-container">
@@ -262,14 +283,14 @@ export default function Home() {
                       {move}
                     </span>
                   ))
-                : "Loading..."}
+                : ""}
             </p>
           </div>
         </div>
       </div>
       <div className="random-pokemon-button-container">
         <button className="random-pokemon-button" onClick={handleRandomPokemon}>
-          Random Pokémon:
+          Find a random Pokémon
         </button>
       </div>
     </div>
