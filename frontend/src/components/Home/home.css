@@ -57,6 +57,25 @@ body {
   }
 }
 
+.suggestions-list {
+  border: 1px solid #ddd;
+  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
 .pokemon-top-container {
   display: flex;
   flex-direction: column;

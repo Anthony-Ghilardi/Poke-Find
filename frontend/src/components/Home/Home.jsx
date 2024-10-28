@@ -9,7 +9,6 @@ export default function Home() {
   const [pokemonDescription, setPokemonDescription] = useState(null);
   const [pokemonMove, setPokemonMove] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [userInput, setUserInput] = useState("");
 
   async function fetchName() {
