@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./home.css";
+import SearchBar from "../SearchBar/SearchBar";
+import SearchResultsList from "../SearchResults/SearchResultsList";
 
 export default function Home() {
   const [pokemonName, setPokemonName] = useState(null);
@@ -10,6 +12,7 @@ export default function Home() {
   const [pokemonMove, setPokemonMove] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState("");
+  const [results, setResults] = useState([]);
 
   async function fetchName() {
     if (!userInput) return;
@@ -118,7 +121,7 @@ export default function Home() {
 
   async function fetchRandomPokemon() {
     function getRandomId() {
-      return Math.floor(Math.random() * 1026) + 1;
+      return Math.floor(Math.random() * 1302) + 1;
     }
     getRandomId();
     const randomId = getRandomId();
@@ -223,6 +226,8 @@ export default function Home() {
   return (
     <div>
       <h1 className="page-header">Welcome to PokéFind</h1>
+      <SearchBar setResults={setResults}/>
+      <SearchResultsList results={results}/>
       <form onSubmit={handleUserInput} className="search-bar-container">
         <label>
           <input
