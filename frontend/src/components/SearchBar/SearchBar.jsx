@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./searchbar.css";
-import { FaSearch } from "react-icons/fa";
 
 export default function SearchBar({ setResults, onSelectedOption }) {
   const [input, setInput] = useState("");
@@ -29,7 +28,7 @@ export default function SearchBar({ setResults, onSelectedOption }) {
   };
   return (
       <div className="input-wrapper">
-        <FaSearch id="search-icon"/>
+        <img className="search-button" src={require("../../assets/pokeball.png")} alt="pokeball icon"></img>
         <input 
           placeholder="Search for a Pokémon" 
           value={input} 

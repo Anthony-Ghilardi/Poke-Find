@@ -1,10 +1,10 @@
 import React from "react";
 import "./searchresult.css";
 
-export default function SearchResult({ result, onSelectedOption }) {
+export default function SearchResult({ result, onSelectedOption, onResultSelected }) {
     const handleClick = () => {
-        console.log("Handle click from SearchResult.jsx",result);
         onSelectedOption(result.name);
+        onResultSelected();
     }
     return (
         <div className="search-result" onClick={handleClick}>

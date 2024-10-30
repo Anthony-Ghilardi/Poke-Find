@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./home.css";
 import SearchBar from "../SearchBar/SearchBar";
 import SearchResultsList from "../SearchResults/SearchResultsList";
@@ -11,7 +11,7 @@ export default function Home() {
   const [pokemonDescription, setPokemonDescription] = useState(null);
   const [pokemonMove, setPokemonMove] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userInput, setUserInput] = useState("");
+  // const [userInput, setUserInput] = useState("");
   const [results, setResults] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -231,34 +231,43 @@ export default function Home() {
   };
 
   const handleSelectedOption = (option) => {
+    setSelectedOption(option);
+  };
+
+  useEffect(() => {
+    if (!selectedOption) return;
     setLoading(true);
-    Promise.all([
-      fetchName(option),
-      fetchType(option),
-      fetchSprite(option),
-      fetchDescription(option),
-      fetchMoves(option)])
-      .then(() => {
+  
+    const fetchData = async () => {
+      try {
+        await fetchName(selectedOption);
+        await fetchType(selectedOption);
+        await fetchSprite(selectedOption);
+        await fetchDescription(selectedOption);
+        await fetchMoves(selectedOption);
+  
         setLoading(false);
         const appear = document.getElementById("pokemon-boxes-container");
         appear.style.display = "flex";
         setTimeout(() => {
           appear.style.opacity = 1;
         }, 10);
-      })
-      .catch((error) => {
+      } catch (error) {
         setLoading(false);
         console.error("Error fetching data", error);
-      });
-    console.log("Handle Selected Option from Home.jsx",option);
-    setSelectedOption(option);
-  }
+      }
+    };
+  
+    fetchData();
+  }, [selectedOption]);
 
   return (
     <div>
       <h1 className="page-header">Welcome to PokéFind</h1>
-      <SearchBar setResults={setResults}/>
-      <SearchResultsList onSelectedOption={handleSelectedOption} results={results}/>
+      <div className="search-bar-container">
+        <SearchBar setResults={setResults}/>
+        <SearchResultsList onSelectedOption={handleSelectedOption} results={results}/>
+      </div>
       {/* <form onSubmit={handleUserInput} className="search-bar-container">
         <label>
           <input
