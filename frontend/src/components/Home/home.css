@@ -19,6 +19,28 @@ body {
   margin-bottom: 1rem;
 }
 
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-size: 1.5em;
+}
+
+.loading-spinner {
+  animation: rotation 3s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(-360deg);}
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .search-bar-container {
   display: flex;
   flex-direction: column;

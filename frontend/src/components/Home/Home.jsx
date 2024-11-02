@@ -260,11 +260,18 @@ export default function Home() {
     };
   
     fetchData();
-  }, [selectedOption]);
+  }, [selectedOption, fetchDescription, fetchMoves, fetchName, fetchSprite, fetchType]);
 
   return (
     <div>
       <h1 className="page-header">Welcome to PokéFind</h1>
+      {loading && (
+        <div className="loading-indicator">
+          <div>
+            <img className="loading-spinner" src={require("../../assets/pokeball.png")} alt="pokeball icon"></img>
+          </div>
+        </div>
+      )}
       <div className="search-bar-container">
         <SearchBar setResults={setResults}/>
         <SearchResultsList onSelectedOption={handleSelectedOption} results={results}/>
