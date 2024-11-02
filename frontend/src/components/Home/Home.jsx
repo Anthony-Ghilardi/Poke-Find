@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./home.css";
+import SearchBar from "../SearchBar/SearchBar";
+import SearchResultsList from "../SearchResults/SearchResultsList";
 
 export default function Home() {
   const [pokemonName, setPokemonName] = useState(null);
@@ -9,16 +11,19 @@ export default function Home() {
   const [pokemonDescription, setPokemonDescription] = useState(null);
   const [pokemonMove, setPokemonMove] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userInput, setUserInput] = useState("");
+  // const [userInput, setUserInput] = useState("");
+  const [results, setResults] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   async function fetchName() {
-    if (!userInput) return;
+    if (!selectedOption) return;
     try {
-      const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
+      const response = await fetch(`/pokemon/${selectedOption}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
       const data = await response.json();
+      console.log("Expected pokemon name",data)
       let capitalName =
         data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
       let moveNameGrammar = `${capitalName}'s moves`;
@@ -31,9 +36,9 @@ export default function Home() {
   }
 
   async function fetchType() {
-    if (!userInput) return;
+    if (!selectedOption) return;
     try {
-      const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
+      const response = await fetch(`/pokemon/${selectedOption}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
@@ -56,9 +61,9 @@ export default function Home() {
   }
 
   async function fetchSprite() {
-    if (!userInput) return;
+    if (!selectedOption) return;
     try {
-      const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
+      const response = await fetch(`/pokemon/${selectedOption}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
@@ -71,10 +76,10 @@ export default function Home() {
   }
 
   async function fetchDescription() {
-    if (!userInput) return;
+    if (!selectedOption) return;
     try {
       const response = await fetch(
-        `/pokemon/pokemon-species/${userInput.toLowerCase()}`
+        `/pokemon/pokemon-species/${selectedOption}`
       );
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -96,9 +101,9 @@ export default function Home() {
   }
 
   async function fetchMoves() {
-    if (!userInput) return;
+    if (!selectedOption) return;
     try {
-      const response = await fetch(`/pokemon/${userInput.toLowerCase()}`);
+      const response = await fetch(`/pokemon/${selectedOption}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
@@ -118,7 +123,7 @@ export default function Home() {
 
   async function fetchRandomPokemon() {
     function getRandomId() {
-      return Math.floor(Math.random() * 1026) + 1;
+      return Math.floor(Math.random() * 1025) + 1;
     }
     getRandomId();
     const randomId = getRandomId();
@@ -141,6 +146,7 @@ export default function Home() {
       // Sets state of random pokemon name
       const randomName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
       setPokemonName(randomName);
+      setMoveGrammar(randomName);
       console.log("Random name: ", randomName);
 
       // Set state of random pokemon type
@@ -184,23 +190,28 @@ export default function Home() {
     }
   }
 
-  const handleUserInput = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    Promise.all([fetchName(), fetchType(), fetchSprite(), fetchDescription(), fetchMoves()])
-      .then(() => {
-        setLoading(false);
-        const appear = document.getElementById("pokemon-boxes-container");
-        appear.style.display = "flex";
-        setTimeout(() => {
-          appear.style.opacity = 1;
-        }, 10);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error fetching data", error);
-      });
-  }
+  // const handleUserInput = (value) => {
+  //   value.preventDefault();
+  //   setLoading(true);
+  //   Promise.all([
+  //     fetchName(value),
+  //     fetchType(value),
+  //     fetchSprite(value),
+  //     fetchDescription(value),
+  //     fetchMoves(value)])
+  //     .then(() => {
+  //       setLoading(false);
+  //       const appear = document.getElementById("pokemon-boxes-container");
+  //       appear.style.display = "flex";
+  //       setTimeout(() => {
+  //         appear.style.opacity = 1;
+  //       }, 10);
+  //     })
+  //     .catch((error) => {
+  //       setLoading(false);
+  //       console.error("Error fetching data", error);
+  //     });
+  // }
 
   const handleRandomPokemon = (e) => {
     e.preventDefault();
@@ -220,10 +231,45 @@ export default function Home() {
     });
   };
 
+  const handleSelectedOption = (option) => {
+    setSelectedOption(option);
+  };
+
+  useEffect(() => {
+    if (!selectedOption) return;
+    setLoading(true);
+  
+    const fetchData = async () => {
+      try {
+        await fetchName(selectedOption);
+        await fetchType(selectedOption);
+        await fetchSprite(selectedOption);
+        await fetchDescription(selectedOption);
+        await fetchMoves(selectedOption);
+  
+        setLoading(false);
+        const appear = document.getElementById("pokemon-boxes-container");
+        appear.style.display = "flex";
+        setTimeout(() => {
+          appear.style.opacity = 1;
+        }, 10);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching data", error);
+      }
+    };
+  
+    fetchData();
+  }, [selectedOption]);
+
   return (
     <div>
       <h1 className="page-header">Welcome to PokéFind</h1>
-      <form onSubmit={handleUserInput} className="search-bar-container">
+      <div className="search-bar-container">
+        <SearchBar setResults={setResults}/>
+        <SearchResultsList onSelectedOption={handleSelectedOption} results={results}/>
+      </div>
+      {/* <form onSubmit={handleUserInput} className="search-bar-container">
         <label>
           <input
             className="search-bar-input"
@@ -238,7 +284,7 @@ export default function Home() {
           type="image"
           src={require("../../assets/pokeball.png")}
         />
-      </form>
+      </form> */}
       <div id="pokemon-boxes-container">
         <div className="pokemon-top-container">
           <div className="row">
@@ -272,7 +318,7 @@ export default function Home() {
         </div>
         <div className="pokemon-bottom-container">
           <h6 className="moves-header">
-            {moveGrammar ? moveGrammar : ""}
+            {moveGrammar ? moveGrammar : ""}'s moves
           </h6>
           <div className="moves-container">
             <p className="moves-scroll-container">
