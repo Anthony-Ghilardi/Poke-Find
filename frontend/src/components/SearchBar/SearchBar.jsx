@@ -30,6 +30,7 @@ export default function SearchBar({ setResults, onSelectedOption }) {
       <div className="input-wrapper">
         <img className="search-button" src={require("../../assets/pokeball.png")} alt="pokeball icon"></img>
         <input 
+          className="search-bar-text"
           placeholder="Search for a Pokémon" 
           value={input} 
           onChange={handleChange}

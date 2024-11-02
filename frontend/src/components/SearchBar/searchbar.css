@@ -44,3 +44,14 @@ input {
 input:focus {
     outline: none;
 }
+
+@media screen and (max-width: 768px) {
+  .search-button {
+    width: 10%;
+    margin: 0 auto;
+  }
+
+  .search-bar-text {
+    font-size: 1.1rem;
+  }
+}

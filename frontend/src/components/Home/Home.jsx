@@ -123,7 +123,7 @@ export default function Home() {
 
   async function fetchRandomPokemon() {
     function getRandomId() {
-      return Math.floor(Math.random() * 1302) + 1;
+      return Math.floor(Math.random() * 1025) + 1;
     }
     getRandomId();
     const randomId = getRandomId();
@@ -146,6 +146,7 @@ export default function Home() {
       // Sets state of random pokemon name
       const randomName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
       setPokemonName(randomName);
+      setMoveGrammar(randomName);
       console.log("Random name: ", randomName);
 
       // Set state of random pokemon type
@@ -317,7 +318,7 @@ export default function Home() {
         </div>
         <div className="pokemon-bottom-container">
           <h6 className="moves-header">
-            {moveGrammar ? moveGrammar : ""}
+            {moveGrammar ? moveGrammar : ""}'s moves
           </h6>
           <div className="moves-container">
             <p className="moves-scroll-container">
