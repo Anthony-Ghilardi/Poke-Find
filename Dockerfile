@@ -9,13 +9,13 @@ ENV NPM_CONFIG_FUND=false
 WORKDIR /app
 
 # Copy only package files first for dependency installation
-COPY frontend/package*.json ./
+COPY ./frontend/package*.json ./
 
 # Install dependencies
 RUN npm ci
 
 # Copy the rest of the app's frontend source code
-COPY frontend .
+COPY ./frontend .
 
 # Build the React app
 RUN npm run build
