@@ -5,3 +5,6 @@ start = "cd frontend && npm start"
 
 [variables]
 NODE_ENV = "production"
+
+[settings]
+PKG_ROOT = "./frontend"
