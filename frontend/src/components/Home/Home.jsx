@@ -107,26 +107,31 @@ export default function Home() {
       async function fetchDescription() {
         if (!selectedOption) return;
         try {
-          //const response = await fetch(`/pokemon/pokemon-species/${selectedOption}`);
-          const response = await fetch(`${backendUrl}/pokemon/${selectedOption}`);
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
+            //const response = await fetch(`/pokemon/pokemon-species/${selectedOption}`);
+            const response = await fetch(`${backendUrl}/pokemon-species/${selectedOption}`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
     
-          const englishFlavorText = data.flavor_text_entries.find(
-            (entry) => entry.language.name === "en"
-          );
-          const description = englishFlavorText
-            ? englishFlavorText.flavor_text
-            : "No description available";
-    
-          setPokemonDescription(description);
-          console.log(description);
+            if (data.flavor_text_entries) {
+                const englishFlavorText = data.flavor_text_entries.find(
+                    (entry) => entry.language.name === "en"
+                );
+                const description = englishFlavorText
+                    ? englishFlavorText.flavor_text
+                    : "No description available";
+                setPokemonDescription(description);
+                console.log(description);
+            } else {
+                console.warn("No flavor_text_entries found in the response.");
+                setPokemonDescription("No description available.");
+            }
         } catch (error) {
-          console.error("Error fetching pokemon description", error);
+            console.error("Error fetching pokemon description", error);
+            setPokemonDescription("Error loading description.");
         }
-      }
+    }
 
       async function fetchMoves() {
         if (!selectedOption) return;
