@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Serve the app using a static server
-CMD ["npx", "serve", "-s", "build"]
+CMD ["npx", "serve", "-s", "build", "sh"]
