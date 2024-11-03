@@ -15,7 +15,7 @@ export default function Home() {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
-
+  console.log("Backend URL from env:", backendUrl);
   function hide() {
     const container = document.getElementById("pokemon-boxes-container");
     if (container) {
