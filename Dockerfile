@@ -8,7 +8,7 @@ WORKDIR /app
 COPY frontend/package*.json ./
 
 # Install dependencies, omitting dev dependencies
-RUN npm ci --omit=dev || cat /root/.npm/_logs/*-debug.log
+RUN npm install --omit=dev || cat /root/.npm/_logs/*-debug.log
 
 # Copy the rest of the application code
 COPY frontend .
