@@ -21,16 +21,19 @@ COPY frontend .
 RUN npm run build
 
 # Final stage - Serving with Caddy
-FROM caddy:latest
+FROM caddy
 
 # Create and move to app directory
 WORKDIR /app
 
 # Copy Caddyfile
-COPY Caddyfile .
+COPY Caddyfile ./
+
+# Copy local code to the container image.
+RUN caddy fmt Caddyfile --overwrite
 
 # Copy the built files from the Node build stage
-COPY --from=build /app/build /app/dist
+COPY --from=build /app/dist ./dist
 
 # Run Caddy to serve the files in /dist
-CMD ["caddy", "run", "--config", "/app/Caddyfile", "--adapter", "caddyfile"]
+CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
