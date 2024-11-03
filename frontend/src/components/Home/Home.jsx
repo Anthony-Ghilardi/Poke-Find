@@ -40,8 +40,10 @@ export default function Home() {
       async function fetchName() {
         if (!selectedOption) return;
         try {
+          const backendUrl = "https://poke-find-backend.up.railway.app"; // Hardcoded URL
+          const response = await fetch(`${backendUrl}/pokemon/${selectedOption}`);
           //const response = await fetch(`/pokemon/${selectedOption}`);
-          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
+          //const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           console.log("Backend URL",process.env.REACT_APP_BACKEND_URL);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
