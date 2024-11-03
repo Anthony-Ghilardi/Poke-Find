@@ -33,4 +33,4 @@ COPY Caddyfile .
 COPY --from=build /app/build /app/dist
 
 # Run Caddy to serve the files in /dist
-CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
+CMD ["caddy", "run", "--config", "/app/Caddyfile", "--adapter", "caddyfile"]
