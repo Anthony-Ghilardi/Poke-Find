@@ -20,20 +20,14 @@ COPY frontend .
 # Build the React app
 RUN npm run build
 
-# Final stage - Serving with Caddy
-FROM caddy
+# Final stage - Serving with Nginx
+FROM nginx:alpine
 
-# Create and move to app directory
-WORKDIR /app
+# Copy the built files from the Node build stage to Nginx's HTML folder
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy Caddyfile
-COPY Caddyfile ./
+# Expose port 80 for the server
+EXPOSE 80
 
-# Copy local code to the container image.
-RUN caddy fmt Caddyfile --overwrite
-
-# Copy the built files from the Node build stage
-COPY --from=build /app/build ./build
-
-# Run Caddy to serve the files in /build
-CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
