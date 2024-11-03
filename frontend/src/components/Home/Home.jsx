@@ -11,115 +11,155 @@ export default function Home() {
   const [pokemonDescription, setPokemonDescription] = useState(null);
   const [pokemonMove, setPokemonMove] = useState(null);
   const [loading, setLoading] = useState(false);
-  // const [userInput, setUserInput] = useState("");
   const [results, setResults] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  async function fetchName() {
-    if (!selectedOption) return;
-    try {
-      const response = await fetch(`/pokemon/${selectedOption}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      const data = await response.json();
-      console.log("Expected pokemon name",data)
-      let capitalName =
-        data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
-      let moveNameGrammar = `${capitalName}'s moves`;
-      setPokemonName(capitalName);
-      setMoveGrammar(moveNameGrammar);
-      console.log(capitalName);
-    } catch (error) {
-      console.error("Error fetching pokemon name", error);
+  function hide() {
+    const container = document.getElementById("pokemon-boxes-container");
+    if (container) {
+      container.style.display = "none";
+    }
+  };
+
+  function appear() {
+    const container = document.getElementById("pokemon-boxes-container");
+    if (container) {
+      container.style.display = "flex";
+      setTimeout(() => {
+        container.style.opacity = 1;
+      }, 10);
     }
   }
 
-  async function fetchType() {
+  useEffect(() => {
     if (!selectedOption) return;
-    try {
-      const response = await fetch(`/pokemon/${selectedOption}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-      const data = await response.json();
-      const types = data.types.map((type) => {
-        if (type && type.type && type.type.name) {
-          return (
-            type.type.name.charAt(0).toUpperCase() +
-            type.type.name.slice(1).toLowerCase()
-          );
-        } else {
-          return "";
+    hide();
+    setLoading(true);
+  
+    const fetchData = async () => {
+      async function fetchName() {
+        if (!selectedOption) return;
+        try {
+          const response = await fetch(`/pokemon/${selectedOption}`);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          console.log("Expected pokemon name",data)
+          let capitalName =
+            data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
+          let moveNameGrammar = `${capitalName}'s moves`;
+          setPokemonName(capitalName);
+          setMoveGrammar(moveNameGrammar);
+          console.log(capitalName);
+        } catch (error) {
+          console.error("Error fetching pokemon name", error);
         }
-      });
-      setPokemonType(types);
-      console.log(types);
-    } catch (error) {
-      console.error("Error fetching pokemon type", error);
-    }
-  }
-
-  async function fetchSprite() {
-    if (!selectedOption) return;
-    try {
-      const response = await fetch(`/pokemon/${selectedOption}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
-      const data = await response.json();
-      setPokemonSprite(data.sprites.front_default);
-      console.log(data.sprites.front_default);
-    } catch (error) {
-      console.error("Error fetching pokemon sprite", error);
-    }
-  }
 
-  async function fetchDescription() {
-    if (!selectedOption) return;
-    try {
-      const response = await fetch(
-        `/pokemon/pokemon-species/${selectedOption}`
-      );
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      async function fetchType() {
+        if (!selectedOption) return;
+        try {
+          const response = await fetch(`/pokemon/${selectedOption}`);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          const types = data.types.map((type) => {
+            if (type && type.type && type.type.name) {
+              return (
+                type.type.name.charAt(0).toUpperCase() +
+                type.type.name.slice(1).toLowerCase()
+              );
+            } else {
+              return "";
+            }
+          });
+          setPokemonType(types);
+          console.log(types);
+        } catch (error) {
+          console.error("Error fetching pokemon type", error);
+        }
       }
-      const data = await response.json();
 
-      const englishFlavorText = data.flavor_text_entries.find(
-        (entry) => entry.language.name === "en"
-      );
-      const description = englishFlavorText
-        ? englishFlavorText.flavor_text
-        : "No description available";
-
-      setPokemonDescription(description);
-      console.log(description);
-    } catch (error) {
-      console.error("Error fetching pokemon description", error);
-    }
-  }
-
-  async function fetchMoves() {
-    if (!selectedOption) return;
-    try {
-      const response = await fetch(`/pokemon/${selectedOption}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      async function fetchSprite() {
+        if (!selectedOption) return;
+        try {
+          const response = await fetch(`/pokemon/${selectedOption}`);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          setPokemonSprite(data.sprites.front_default);
+          console.log(data.sprites.front_default);
+        } catch (error) {
+          console.error("Error fetching pokemon sprite", error);
+        }
       }
-      const data = await response.json();
-      const moves = data.moves;
-      console.log(moves);
-      const cleanedMoves = moves.map(
-        (move) =>
-          move.move.name.charAt(0).toUpperCase() + move.move.name.slice(1)
-      );
-      setPokemonMove(cleanedMoves);
-      console.log(cleanedMoves);
-    } catch (error) {
-      console.error("Error fetching pokemon moves", error);
-    }
-  }
+
+      async function fetchDescription() {
+        if (!selectedOption) return;
+        try {
+          const response = await fetch(
+            `/pokemon/pokemon-species/${selectedOption}`
+          );
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+    
+          const englishFlavorText = data.flavor_text_entries.find(
+            (entry) => entry.language.name === "en"
+          );
+          const description = englishFlavorText
+            ? englishFlavorText.flavor_text
+            : "No description available";
+    
+          setPokemonDescription(description);
+          console.log(description);
+        } catch (error) {
+          console.error("Error fetching pokemon description", error);
+        }
+      }
+
+      async function fetchMoves() {
+        if (!selectedOption) return;
+        try {
+          const response = await fetch(`/pokemon/${selectedOption}`);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          const moves = data.moves;
+          console.log(moves);
+          const cleanedMoves = moves.map(
+            (move) =>
+              move.move.name.charAt(0).toUpperCase() + move.move.name.slice(1)
+          );
+          setPokemonMove(cleanedMoves);
+          console.log(cleanedMoves);
+        } catch (error) {
+          console.error("Error fetching pokemon moves", error);
+        }
+      }
+
+      try {
+        await fetchName(selectedOption);
+        await fetchType(selectedOption);
+        await fetchSprite(selectedOption);
+        await fetchDescription(selectedOption);
+        await fetchMoves(selectedOption);
+  
+        setLoading(false);
+        appear();
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching data", error);
+      }
+    };
+  
+    fetchData();
+  }, [selectedOption]);
 
   async function fetchRandomPokemon() {
     function getRandomId() {
@@ -190,40 +230,14 @@ export default function Home() {
     }
   }
 
-  // const handleUserInput = (value) => {
-  //   value.preventDefault();
-  //   setLoading(true);
-  //   Promise.all([
-  //     fetchName(value),
-  //     fetchType(value),
-  //     fetchSprite(value),
-  //     fetchDescription(value),
-  //     fetchMoves(value)])
-  //     .then(() => {
-  //       setLoading(false);
-  //       const appear = document.getElementById("pokemon-boxes-container");
-  //       appear.style.display = "flex";
-  //       setTimeout(() => {
-  //         appear.style.opacity = 1;
-  //       }, 10);
-  //     })
-  //     .catch((error) => {
-  //       setLoading(false);
-  //       console.error("Error fetching data", error);
-  //     });
-  // }
-
   const handleRandomPokemon = (e) => {
     e.preventDefault();
+    hide();
     setLoading(true);
     fetchRandomPokemon()
     .then(() => {
       setLoading(false);
-      const appear = document.getElementById("pokemon-boxes-container");
-      appear.style.display = "flex";
-      setTimeout(() => {
-        appear.style.opacity = 1;
-      }, 10);
+      appear();
     })
     .catch((error) => {
       setLoading(false);
@@ -234,33 +248,6 @@ export default function Home() {
   const handleSelectedOption = (option) => {
     setSelectedOption(option);
   };
-
-  useEffect(() => {
-    if (!selectedOption) return;
-    setLoading(true);
-  
-    const fetchData = async () => {
-      try {
-        await fetchName(selectedOption);
-        await fetchType(selectedOption);
-        await fetchSprite(selectedOption);
-        await fetchDescription(selectedOption);
-        await fetchMoves(selectedOption);
-  
-        setLoading(false);
-        const appear = document.getElementById("pokemon-boxes-container");
-        appear.style.display = "flex";
-        setTimeout(() => {
-          appear.style.opacity = 1;
-        }, 10);
-      } catch (error) {
-        setLoading(false);
-        console.error("Error fetching data", error);
-      }
-    };
-  
-    fetchData();
-  }, [selectedOption, fetchDescription, fetchMoves, fetchName, fetchSprite, fetchType]);
 
   return (
     <div>
@@ -276,22 +263,7 @@ export default function Home() {
         <SearchBar setResults={setResults}/>
         <SearchResultsList onSelectedOption={handleSelectedOption} results={results}/>
       </div>
-      {/* <form onSubmit={handleUserInput} className="search-bar-container">
-        <label>
-          <input
-            className="search-bar-input"
-            type="text"
-            placeholder="Search for a Pokémon"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-          />
-        </label>
-        <input
-          className="search-button"
-          type="image"
-          src={require("../../assets/pokeball.png")}
-        />
-      </form> */}
+
       <div id="pokemon-boxes-container">
         <div className="pokemon-top-container">
           <div className="row">
