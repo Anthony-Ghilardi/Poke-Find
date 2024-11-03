@@ -42,6 +42,7 @@ export default function Home() {
         try {
           //const response = await fetch(`/pokemon/${selectedOption}`);
           const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
+          console.log("Backend URL",process.env.REACT_APP_BACKEND_URL);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
