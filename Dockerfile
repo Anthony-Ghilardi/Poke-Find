@@ -14,6 +14,12 @@ COPY ./frontend/package*.json ./
 # Install dependencies
 RUN npm ci
 
+# Set build argument
+ARG REACT_APP_BACKEND_URL
+
+# Make REACT_APP_BACKEND_URL available for the build process
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+
 # Copy the rest of the app's frontend source code
 COPY ./frontend .
 
