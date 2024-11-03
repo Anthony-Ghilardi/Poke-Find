@@ -33,7 +33,7 @@ COPY Caddyfile ./
 RUN caddy fmt Caddyfile --overwrite
 
 # Copy the built files from the Node build stage
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/build ./build
 
-# Run Caddy to serve the files in /dist
+# Run Caddy to serve the files in /build
 CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
