@@ -108,14 +108,14 @@ export default function Home() {
         if (!selectedOption) return;
         try {
             //const response = await fetch(`/pokemon/pokemon-species/${selectedOption}`);
-            const response = await fetch(`${backendUrl}/pokemon-species/${selectedOption}`);
+            const response = await fetch(`${backendUrl}/pokemon/pokemon-species/${selectedOption}`);
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();
     
             if (data.flavor_text_entries) {
-                const englishFlavorText = data.flavor_text_entries.find(
+                const englishFlavorText = data?.flavor_text_entries?.find(
                     (entry) => entry.language.name === "en"
                 );
                 const description = englishFlavorText
