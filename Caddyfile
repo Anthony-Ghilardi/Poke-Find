@@ -2,33 +2,28 @@
     admin off
     persist_config off
     auto_https off
-
     log {
         format json
     }
-
     servers {
         trusted_proxies static private_ranges 100.0.0.0/8
     }
 }
 
-:{$PORT:3000} {
+:{$PORT} {
     log {
         format json
     }
 
-    # Health check route for Railway
-    rewrite /health /*
-
-    # Set root to the 'dist' folder created during the build
+    # Serve files from 'dist'
     root * dist
 
     # Enable gzip encoding
     encode gzip
 
-    # Serve static files from 'dist'
+    # Serve static files
     file_server
 
-    # Redirect all other requests to index.html for client-side routing
+    # Rewrite for single-page application routing
     try_files {path} /index.html
 }

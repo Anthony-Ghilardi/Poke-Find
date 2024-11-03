@@ -1,35 +1,36 @@
-# Use the Node alpine official image for building the React app
+# Build Stage
 FROM node:lts-alpine AS build
 
-# Set environment variables to disable unwanted notifications
+# Set config for Node and npm
 ENV NPM_CONFIG_UPDATE_NOTIFIER=false
 ENV NPM_CONFIG_FUND=false
 
 # Create and change to the app directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy only package files first for dependency installation
 COPY frontend/package*.json ./
+
+# Install dependencies
 RUN npm ci
 
-# Copy the entire frontend directory contents and build the app
-COPY frontend ./
+# Copy the rest of the app's frontend source code
+COPY frontend .
+
+# Build the React app
 RUN npm run build
 
-# Use Caddy image for serving the app
-FROM caddy
+# Final stage - Serving with Caddy
+FROM caddy:latest
 
-# Set working directory in the Caddy container
+# Create and move to app directory
 WORKDIR /app
 
-# Copy the Caddyfile to configure Caddy for serving
-COPY Caddyfile ./
+# Copy Caddyfile
+COPY Caddyfile .
 
-# Format Caddyfile (optional but good practice)
-RUN caddy fmt Caddyfile --overwrite
+# Copy the built files from the Node build stage
+COPY --from=build /app/build /app/dist
 
-# Copy the build files from the first stage
-COPY --from=build /app/build ./dist
-
-# Run Caddy to serve the app
+# Run Caddy to serve the files in /dist
 CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
