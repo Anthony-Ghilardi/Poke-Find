@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "poke-find-backend.up.railway.app",
+  "proxy": "http://localhost:8000",
   "eslintConfig": {
     "extends": [
       "react-app",

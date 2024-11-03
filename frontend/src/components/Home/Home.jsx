@@ -40,7 +40,8 @@ export default function Home() {
       async function fetchName() {
         if (!selectedOption) return;
         try {
-          const response = await fetch(`/pokemon/${selectedOption}`);
+          //const response = await fetch(`/pokemon/${selectedOption}`);
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -60,7 +61,8 @@ export default function Home() {
       async function fetchType() {
         if (!selectedOption) return;
         try {
-          const response = await fetch(`/pokemon/${selectedOption}`);
+          //const response = await fetch(`/pokemon/${selectedOption}`);
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -85,7 +87,8 @@ export default function Home() {
       async function fetchSprite() {
         if (!selectedOption) return;
         try {
-          const response = await fetch(`/pokemon/${selectedOption}`);
+          //const response = await fetch(`/pokemon/${selectedOption}`);
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -100,9 +103,8 @@ export default function Home() {
       async function fetchDescription() {
         if (!selectedOption) return;
         try {
-          const response = await fetch(
-            `/pokemon/pokemon-species/${selectedOption}`
-          );
+          //const response = await fetch(`/pokemon/pokemon-species/${selectedOption}`);
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -125,7 +127,8 @@ export default function Home() {
       async function fetchMoves() {
         if (!selectedOption) return;
         try {
-          const response = await fetch(`/pokemon/${selectedOption}`);
+          //const response = await fetch(`/pokemon/${selectedOption}`);
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/${selectedOption}`);
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -167,8 +170,10 @@ export default function Home() {
     }
     getRandomId();
     const randomId = getRandomId();
-    const urlOne = `/pokemon/${randomId}`;
-    const urlTwo = `/pokemon/pokemon-species/${randomId}`;
+    //const urlOne = `/pokemon/${randomId}`;
+    const urlOne = `${process.env.REACT_APP_BACKEND_URL}/pokemon/${randomId}`
+    //const urlTwo = `/pokemon/pokemon-species/${randomId}`;
+    const urlTwo = `${process.env.REACT_APP_BACKEND_URL}/pokemon/pokemon-species/${randomId}`;
 
     try {
       const [responseOne, responseTwo] = await Promise.all([
