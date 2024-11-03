@@ -1,0 +1,7 @@
+[phases]
+install = "cd frontend && npm ci --omit=dev"
+build = "cd frontend && npm run build"
+start = "cd frontend && npm start" 
+
+[variables]
+NODE_ENV = "production"
