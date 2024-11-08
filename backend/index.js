@@ -5,10 +5,13 @@ const requests = require('./routes/requests');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Enable CORS for all routes
-app.use(cors({
-    origin: 'https://poke-find-production.up.railway.app'
-}));
+// Deployment devlopment cor setup
+// app.use(cors({
+//     origin: 'https://poke-find-production.up.railway.app'
+// }));
+
+// Local dev cor setup
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(express.json());
 app.use('/pokemon', requests);
