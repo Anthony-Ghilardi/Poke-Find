@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./home.css";
 import SearchBar from "../SearchBar/SearchBar";
 import SearchResultsList from "../SearchResults/SearchResultsList";
+import LoginHome from "../Auth/Login";
 
 export default function Home() {
   const [pokemonName, setPokemonName] = useState(null);
@@ -286,6 +287,9 @@ export default function Home() {
 
   return (
     <div>
+      <div>
+        <LoginHome />
+      </div>
       <h1 className="page-header">Welcome to PokéFind</h1>
       {loading && (
         <div className="loading-indicator">

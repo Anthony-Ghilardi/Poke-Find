@@ -1,4 +1,5 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 import express from "express";
 import cors from "cors";
 import axios from "axios";
@@ -8,6 +9,7 @@ import cookieParser from "cookie-parser";
 const PORT = process.env.PORT || 5000;
 
 const config = {
+  //clientId: process.env.GOOGLE_CLIENT_ID,
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
@@ -44,7 +46,8 @@ const app = express();
 // Resolve Cors
 app.use(
     cors({
-        origin: [config.clientUrl],
+        //origin: [config.clientUrl],
+        origin: "http://localhost:3000",
         credentials: true,
     }),
 )
@@ -67,9 +70,8 @@ const auth = (req, res, next) => {
 
 // Frontedn Authroization URL
 app.get('/auth/url', (_, res) => {
-    res.json({
-        url: `${config.authUrl}?${authParams}`,
-    })
+  const authUrl = `${config.authUrl}?${authParams}`;
+  res.json({ url: authUrl });
 });
 
 // Frontend authrization URL

@@ -1,14 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Home from "./components/Home/Home";
+import React from "react";
+import { RouterProvider } from "react-router-dom";
+import routes from "./components/Routes/Routes";
+import { AuthContextProvider } from "./components/Context/AuthContext";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Router>
+      <AuthContextProvider>
+            <RouterProvider router={routes} />
+      </AuthContextProvider>
     </div>
   );
 }
