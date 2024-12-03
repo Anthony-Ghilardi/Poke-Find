@@ -43,6 +43,24 @@ app.get('/users', async (req, res) => {
     res.json(result.rows);
 })
 
+app.post('/adduser', async (req, res) => {
+    try {
+        const { email, oauth_provider, oauth_id, } = req.body;
+
+        const result = await db.query(
+            "INSERT INTO users (email, oauth_provider, oauth_id) VALUES ($1, $2, $3) RETURNING*",
+            [email, oauth_provider, oauth_id]
+        );
+        res.status(201).json({
+            message: "User added successfully",
+            user: result.rows[0],
+        });
+    } catch (err) {
+        console.error("Error adding user:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`The server is running on port ${PORT}`);
 });
